@@ -31,19 +31,25 @@ export default class AnimatedCircularProgress extends React.PureComponent {
     );
   }
 
+
   animate(toVal, dur, ease) {
-    const toValue = toVal >= 0 ? toVal : this.props.fill;
+    const toValue = toVal || this.props.fill;
     const duration = dur || this.props.duration;
     const easing = ease || this.props.easing;
 
-    const anim = Animated.timing(this.state.fillAnimation, {
+    const animationRef = Animated.timing(this.state.fillAnimation, {
       toValue,
       easing,
-      duration,
+      duration
     });
-    anim.start(this.props.onAnimationComplete);
+    this.animationRef = animationRef;
+    animationRef.start(this.props.onAnimationComplete);
 
-    return anim;
+    return animationRef;
+  }
+
+  stopAnimation() {
+    this.animationRef.stop();
   }
 
   render() {
